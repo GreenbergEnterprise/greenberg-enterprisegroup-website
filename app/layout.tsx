@@ -1,0 +1,27 @@
+import type { Metadata } from "next";
+import { content } from "@/lib/content";
+import "./globals.css";
+
+const pageTitle = `${content.brand.name} | Building Enduring Businesses`;
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: content.hero.lede,
+  openGraph: {
+    title: pageTitle,
+    description: content.hero.lede,
+    type: "website",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
