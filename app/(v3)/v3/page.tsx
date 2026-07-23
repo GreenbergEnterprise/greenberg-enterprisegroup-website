@@ -360,8 +360,8 @@ export default function V3() {
             ))}
           </div>
           <div className="versions" aria-label="Design versions">
-            <a href="/">V1</a>
-            <a href="/v2">V2</a>
+            <a href="/v1">V1</a>
+            <a href="/">V2</a>
             <a href="/v3" className="on">
               V3
             </a>
