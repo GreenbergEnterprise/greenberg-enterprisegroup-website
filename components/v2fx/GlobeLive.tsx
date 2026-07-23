@@ -60,7 +60,34 @@ const ARCS: [number, number][] = [
   [1, 4],
 ];
 
-export default function GlobeLive() {
+/** Deterministic PRNG so the busy-mode network is reproducible. */
+function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+interface LiveArc {
+  A: P3;
+  B: P3;
+  born: number;
+  dur: number;
+  big: boolean;
+  dist: number;
+}
+
+/**
+ * busy=false: the calm original — 7 fixed routes with slow pulses.
+ * busy=true: a live network storm — arcs constantly spawning between
+ * land points, drawing themselves across the globe, flashing on arrival
+ * and fading out while new ones fire elsewhere.
+ */
+export default function GlobeLive({ busy = false }: { busy?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -84,6 +111,31 @@ export default function GlobeLive() {
       }
     }
     const hubs = HUBS.map(([la, lo]) => latLonToXYZ(la, lo));
+
+    // busy mode: endpoint pool (hubs + a spread of land points) and live arcs
+    const rand = mulberry32(1337);
+    const pool: P3[] = [...hubs];
+    for (let i = 0; i < pts.length; i += 17) pool.push(pts[i].p);
+    const arcs: LiveArc[] = [];
+    const MAX_ARCS = 110;
+    const angDist = (a: P3, b: P3) =>
+      Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z)));
+    const spawnArc = (now: number, preAge = 0) => {
+      let A: P3, B: P3, d = 0, guard = 0;
+      do {
+        A = rand() < 0.55 ? hubs[(rand() * hubs.length) | 0] : pool[(rand() * pool.length) | 0];
+        B = pool[(rand() * pool.length) | 0];
+        d = angDist(A, B);
+      } while ((d < 0.35 || d > 2.6) && guard++ < 8);
+      arcs.push({
+        A,
+        B,
+        born: now - preAge,
+        dur: 1.6 + rand() * 1.9,
+        big: rand() < 0.16,
+        dist: d,
+      });
+    };
 
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     let W = 0, H = 0;
@@ -163,6 +215,7 @@ export default function GlobeLive() {
         ctx.fill();
       }
 
+      if (!busy) {
       // connection arcs with traveling pulses
       for (let i = 0; i < ARCS.length; i++) {
         const [ai, bi] = ARCS[i];
@@ -220,6 +273,98 @@ export default function GlobeLive() {
           ctx.fill();
         }
       }
+      } else {
+        // live network: purge finished arcs, keep the sky saturated
+        for (let i = arcs.length - 1; i >= 0; i--) {
+          if ((tSec - arcs[i].born) / arcs[i].dur > 1) arcs.splice(i, 1);
+        }
+        while (arcs.length < MAX_ARCS) spawnArc(tSec, rand() * 0.25);
+
+        for (const arc of arcs) {
+          const p = (tSec - arc.born) / arc.dur;
+          const growEnd = 0.32;
+          const reach = p < growEnd ? 1 - Math.pow(1 - p / growEnd, 3) : 1;
+          const fade = p < 0.7 ? 1 : Math.max(0, 1 - (p - 0.7) / 0.3);
+          const lift = 0.09 + 0.11 * arc.dist;
+          const STEPS = 26;
+          const nSeg = Math.max(2, Math.round(STEPS * reach));
+
+          ctx.beginPath();
+          let drawing = false;
+          let zSum = 0, zN = 0;
+          let head: P3 | null = null;
+          for (let s = 0; s <= nSeg; s++) {
+            const tt = s / STEPS;
+            const m = slerp(arc.A, arc.B, tt);
+            const l = 1 + lift * Math.sin(Math.PI * tt);
+            const q = rotate({ x: m.x * l, y: m.y * l, z: m.z * l }, rot);
+            if (s === nSeg) head = q;
+            if (q.z < 0) {
+              drawing = false;
+              continue;
+            }
+            zSum += q.z;
+            zN++;
+            const sx = cx + q.x * R, sy = cy - q.y * R;
+            if (!drawing) {
+              ctx.moveTo(sx, sy);
+              drawing = true;
+            } else {
+              ctx.lineTo(sx, sy);
+            }
+          }
+          if (!zN) continue;
+          const zAvg = zSum / zN;
+          const a = fade * (arc.big ? 0.62 : 0.4) * (0.4 + 0.6 * zAvg);
+          ctx.strokeStyle = arc.big
+            ? `rgba(27,117,187,${a.toFixed(3)})`
+            : `rgba(241,90,36,${a.toFixed(3)})`;
+          ctx.lineWidth = arc.big ? 1.7 : 1.2;
+          ctx.stroke();
+
+          // bright head while the connection is being made
+          if (p < growEnd && head && head.z > 0) {
+            const hx = cx + head.x * R, hy = cy - head.y * R;
+            ctx.fillStyle = `rgba(255,255,255,${(0.9 * fade).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.arc(hx, hy, 1.8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = arc.big ? "rgba(27,117,187,0.5)" : "rgba(241,90,36,0.5)";
+            ctx.beginPath();
+            ctx.arc(hx, hy, 3.6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // impact ring on arrival
+          if (p >= growEnd && p < growEnd + 0.16) {
+            const q = rotate(arc.B, rot);
+            if (q.z > 0) {
+              const k = (p - growEnd) / 0.16;
+              const bx = cx + q.x * R, by = cy - q.y * R;
+              ctx.strokeStyle = `rgba(241,90,36,${(0.7 * (1 - k) * q.z).toFixed(3)})`;
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.arc(bx, by, 2 + k * 9, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // steady hub glow
+        for (const h of hubs) {
+          const q = rotate(h, rot);
+          if (q.z < 0.02) continue;
+          const hx = cx + q.x * R, hy = cy - q.y * R;
+          ctx.fillStyle = "rgba(241,90,36,0.95)";
+          ctx.beginPath();
+          ctx.arc(hx, hy, 2.4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "rgba(241,90,36,0.18)";
+          ctx.beginPath();
+          ctx.arc(hx, hy, 6.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
 
       // soft ground shadow
       const shY = cy + R * 1.38;
@@ -237,6 +382,7 @@ export default function GlobeLive() {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
+      if (busy) for (let i = 0; i < MAX_ARCS; i++) spawnArc(20, rand() * 2.4);
       draw(20);
       ro.disconnect();
       return;
@@ -260,7 +406,7 @@ export default function GlobeLive() {
       io.disconnect();
       ro.disconnect();
     };
-  }, []);
+  }, [busy]);
 
   return (
     <canvas
