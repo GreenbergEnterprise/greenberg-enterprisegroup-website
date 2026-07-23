@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { content } from "@/lib/content";
 import OceanLive from "@/components/v2fx/OceanLive";
 import GlobeLive from "@/components/v2fx/GlobeLive";
+import EarthLive from "@/components/v2fx/EarthLive";
 import CloudsLive from "@/components/v2fx/CloudsLive";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ const CONCEPTS: {
   desc: string;
   Comp: React.ComponentType<{ busy?: boolean }>;
   busy?: boolean;
+  frameClass?: string;
 }[] = [
   {
     letter: "A",
@@ -34,6 +36,13 @@ const CONCEPTS: {
     desc: "The busy version: dozens of connections alive at every moment, constantly firing between cities and land points across the globe. Each one draws itself across the sky, lands with an impact ring, and fades as new ones spark elsewhere — internet traffic buzzing around a living Earth.",
     Comp: GlobeLive,
     busy: true,
+  },
+  {
+    letter: "B3",
+    name: "Connected Earth — Realistic",
+    desc: "The realistic take: a true 3D Earth with continents, climate colors, drifting clouds, sun glint on the oceans and an atmosphere rim — all generated in code (the surface texture is painted from real map data, the clouds are live noise fields). The same storm of connections buzzes above it.",
+    Comp: EarthLive,
+    frameClass: "frame-space",
   },
   {
     letter: "C",
@@ -60,6 +69,7 @@ export default function Concepts() {
           <a href="#concept-a">A</a>
           <a href="#concept-b">B</a>
           <a href="#concept-b2">B2</a>
+          <a href="#concept-b3">B3</a>
           <a href="#concept-c">C</a>
         </nav>
         <a className="btn btn-ghost header-contact" href="/v2">
@@ -79,7 +89,7 @@ export default function Concepts() {
         </p>
       </section>
 
-      {CONCEPTS.map(({ letter, name, desc, Comp, busy }) => (
+      {CONCEPTS.map(({ letter, name, desc, Comp, busy, frameClass }) => (
         <section className="section concept" id={`concept-${letter.toLowerCase()}`} key={letter}>
           <div className="concept-head">
             <span className="concept-letter">{letter}</span>
@@ -92,7 +102,7 @@ export default function Concepts() {
               Live
             </span>
           </div>
-          <div className="concept-frame">
+          <div className={`concept-frame${frameClass ? ` ${frameClass}` : ""}`}>
             <Comp busy={busy} />
           </div>
         </section>
