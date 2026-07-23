@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { content } from "@/lib/content";
-import "./globals.css";
+import "./v1.css";
 
 const pageTitle = `${content.brand.name} | Building Enduring Businesses`;
 
