@@ -1256,3 +1256,8 @@ footer {
     animation: none;
   }
 }
+
+/* deep-space backdrop for the realistic Earth concept */
+.concept-frame.frame-space {
+  background: radial-gradient(ellipse at 32% 22%, #10365c 0%, #081a33 45%, #040d1c 100%);
+}
