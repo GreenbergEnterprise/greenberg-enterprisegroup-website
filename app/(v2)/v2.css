@@ -350,6 +350,9 @@ body:before {
 .frame-earth {
   background: radial-gradient(ellipse at 32% 22%, #10365c 0%, #081a33 45%, #040d1c 100%);
 }
+.frame-globe {
+  background: radial-gradient(ellipse at 30% 22%, #ffffff 0%, #eef5fb 55%, #dee9f4 100%);
+}
 
 /* stats bar */
 .stats {

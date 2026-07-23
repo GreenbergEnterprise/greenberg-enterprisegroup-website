@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { content } from "@/lib/content";
 import MotionFX from "@/components/MotionFX";
-import EarthLive from "@/components/v2fx/EarthLive";
+import GlobeLive from "@/components/v2fx/GlobeLive";
 
 /** Render lines separated by <br/>. */
 function multiline(lines: string[]) {
@@ -108,12 +108,12 @@ export default function Home() {
 
           <div className="hero-visual" data-reveal style={{ "--d": ".2s" } as React.CSSProperties}>
             <div
-              className="photo-frame frame-earth"
+              className="photo-frame frame-globe"
               data-tilt="6"
               role="img"
-              aria-label="Rotating 3D Earth with live global network connections"
+              aria-label="Rotating 3D globe with live global network connections"
             >
-              <EarthLive />
+              <GlobeLive busy />
             </div>
           </div>
         </div>
