@@ -340,20 +340,6 @@ body:before {
   box-shadow: var(--shadow-lift);
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
-.kenburns {
-  position: absolute;
-  inset: -8%;
-  background: url(/hero-architecture.png) center/cover no-repeat;
-  animation: kb 30s ease-in-out infinite alternate;
-}
-@keyframes kb {
-  from {
-    transform: scale(1) translate(0, 0);
-  }
-  to {
-    transform: scale(1.16) translate(-2.4%, 2%);
-  }
-}
 .photo-frame:after {
   content: "";
   position: absolute;
@@ -361,84 +347,8 @@ body:before {
   background: linear-gradient(115deg, rgba(255, 255, 255, 0.24) 0%, transparent 34%),
     linear-gradient(to top, rgba(12, 58, 97, 0.16), transparent 42%);
 }
-.scene {
-  position: absolute;
-  left: -58px;
-  bottom: -8px;
-  width: 132px;
-  height: 132px;
-  perspective: 1000px;
-  z-index: 2;
-}
-.cube {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: cubeSpin 26s linear infinite;
-}
-@keyframes cubeSpin {
-  from {
-    transform: rotateX(-24deg) rotateY(0deg);
-  }
-  to {
-    transform: rotateX(-24deg) rotateY(360deg);
-  }
-}
-.cube i {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font: 400 62px/1 var(--serif);
-  font-style: normal;
-  color: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-}
-.cube .f1 {
-  background: var(--blue);
-  transform: translateZ(66px);
-}
-.cube .f2 {
-  background: var(--blue-deep);
-  transform: rotateY(90deg) translateZ(66px);
-}
-.cube .f3 {
-  background: var(--blue);
-  transform: rotateY(180deg) translateZ(66px);
-}
-.cube .f4 {
-  background: var(--blue-deep);
-  transform: rotateY(-90deg) translateZ(66px);
-}
-.cube .f5 {
-  background: var(--orange);
-  transform: rotateX(90deg) translateZ(66px);
-}
-.cube .f6 {
-  background: var(--orange-deep);
-  transform: rotateX(-90deg) translateZ(66px);
-}
-.cube-shadow {
-  position: absolute;
-  left: -46px;
-  bottom: -34px;
-  width: 120px;
-  height: 26px;
-  border-radius: 50%;
-  background: rgba(16, 42, 67, 0.22);
-  filter: blur(12px);
-  animation: shadowPulse 26s linear infinite;
-}
-@keyframes shadowPulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(0.86);
-    opacity: 0.6;
-  }
+.frame-earth {
+  background: radial-gradient(ellipse at 32% 22%, #10365c 0%, #081a33 45%, #040d1c 100%);
 }
 
 /* stats bar */
@@ -1052,10 +962,6 @@ footer {
   .photo-frame {
     transform: none;
   }
-  .scene {
-    left: auto;
-    right: -20px;
-  }
   .stats {
     grid-template-columns: 1fr 1fr;
     gap: 26px;
@@ -1112,12 +1018,6 @@ footer {
     grid-template-columns: 1fr 1fr;
     padding: 24px;
   }
-  .scene {
-    display: none;
-  }
-  .cube-shadow {
-    display: none;
-  }
   .band-tagline {
     font-size: 36px;
   }
@@ -1132,12 +1032,9 @@ footer {
   html {
     scroll-behavior: auto;
   }
-  .kenburns,
-  .cube,
   .mini-cube,
   .ticker-track,
-  .hero-blob,
-  .cube-shadow {
+  .hero-blob {
     animation: none !important;
     transition: none !important;
   }

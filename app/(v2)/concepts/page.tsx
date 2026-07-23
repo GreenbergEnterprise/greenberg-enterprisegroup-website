@@ -58,7 +58,7 @@ export default function Concepts() {
   return (
     <main className="concepts">
       <header className="site-header">
-        <a className="wordmark" href="/v2" aria-label="Back to version 2">
+        <a className="wordmark" href="/" aria-label="Back to home">
           <img src="/geg-mark-color.png" alt="" width={46} height={46} />
           <span className="wm-text">
             <b>Greenberg</b>
@@ -72,8 +72,8 @@ export default function Concepts() {
           <a href="#concept-b3">B3</a>
           <a href="#concept-c">C</a>
         </nav>
-        <a className="btn btn-ghost header-contact" href="/v2">
-          Back to V2 <span aria-hidden="true">←</span>
+        <a className="btn btn-ghost header-contact" href="/">
+          Back to home <span aria-hidden="true">←</span>
         </a>
       </header>
 
@@ -120,9 +120,9 @@ export default function Concepts() {
           </div>
         </div>
         <div className="footer-links">
-          <a href="/v2">Version 2</a>
+          <a href="/">Home</a>
+          <a href="/v1">Version 1</a>
           <a href="/v3">Version 3</a>
-          <a href="/">Version 1</a>
         </div>
         <p className="copyright">
           © {content.footer.copyrightYear} {brand.legalName}. All rights reserved.

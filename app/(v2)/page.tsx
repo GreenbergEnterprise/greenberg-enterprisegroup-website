@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { content } from "@/lib/content";
 import MotionFX from "@/components/MotionFX";
+import EarthLive from "@/components/v2fx/EarthLive";
 
 /** Render lines separated by <br/>. */
 function multiline(lines: string[]) {
@@ -25,11 +26,10 @@ function accent(text: string, word: string) {
   );
 }
 
-function Cube({ size, letters }: { size: "hero" | "mini"; letters: [string, string, string] }) {
-  const cls = size === "hero" ? "cube" : "mini-cube";
+function MiniCube({ letters }: { letters: [string, string, string] }) {
   const [a, b, c] = letters;
   return (
-    <div className={cls} aria-hidden="true">
+    <div className="mini-cube" aria-hidden="true">
       <i className="f1">{a}</i>
       <i className="f2">{b}</i>
       <i className="f3">{a}</i>
@@ -107,13 +107,14 @@ export default function Home() {
           </div>
 
           <div className="hero-visual" data-reveal style={{ "--d": ".2s" } as React.CSSProperties}>
-            <div className="photo-frame" data-tilt="6" role="img" aria-label={hero.imageAlt}>
-              <div className="kenburns" />
+            <div
+              className="photo-frame frame-earth"
+              data-tilt="6"
+              role="img"
+              aria-label="Rotating 3D Earth with live global network connections"
+            >
+              <EarthLive />
             </div>
-            <div className="scene">
-              <Cube size="hero" letters={["G", "E", "G"]} />
-            </div>
-            <div className="cube-shadow" aria-hidden="true" />
           </div>
         </div>
 
@@ -188,7 +189,7 @@ export default function Home() {
             >
               <div className="company-top">
                 <div className="mini-scene">
-                  <Cube size="mini" letters={[company.monogram, company.monogram, "G"]} />
+                  <MiniCube letters={[company.monogram, company.monogram, "G"]} />
                 </div>
                 <span className="company-index">{company.index}</span>
               </div>
