@@ -12,6 +12,10 @@ export const metadata: Metadata = {
     description: content.hero.lede,
     type: "website",
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
