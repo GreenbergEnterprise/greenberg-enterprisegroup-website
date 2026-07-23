@@ -9,7 +9,13 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-const CONCEPTS = [
+const CONCEPTS: {
+  letter: string;
+  name: string;
+  desc: string;
+  Comp: React.ComponentType<{ busy?: boolean }>;
+  busy?: boolean;
+}[] = [
   {
     letter: "A",
     name: "Living Ocean",
@@ -21,6 +27,13 @@ const CONCEPTS = [
     name: "Connected Earth",
     desc: "A rotating 3D globe drawn from real continent data as a matrix of brand-blue dots, with orange connection arcs pulsing between world cities — the holding company with global reach. Rendered with hand-rolled 3D math, no libraries.",
     Comp: GlobeLive,
+  },
+  {
+    letter: "B2",
+    name: "Connected Earth — Live Network",
+    desc: "The busy version: dozens of connections alive at every moment, constantly firing between cities and land points across the globe. Each one draws itself across the sky, lands with an impact ring, and fades as new ones spark elsewhere — internet traffic buzzing around a living Earth.",
+    Comp: GlobeLive,
+    busy: true,
   },
   {
     letter: "C",
@@ -44,9 +57,10 @@ export default function Concepts() {
           </span>
         </a>
         <nav aria-label="Concepts navigation">
-          <a href="#concept-a">Concept A</a>
-          <a href="#concept-b">Concept B</a>
-          <a href="#concept-c">Concept C</a>
+          <a href="#concept-a">A</a>
+          <a href="#concept-b">B</a>
+          <a href="#concept-b2">B2</a>
+          <a href="#concept-c">C</a>
         </nav>
         <a className="btn btn-ghost header-contact" href="/v2">
           Back to V2 <span aria-hidden="true">←</span>
@@ -65,7 +79,7 @@ export default function Concepts() {
         </p>
       </section>
 
-      {CONCEPTS.map(({ letter, name, desc, Comp }) => (
+      {CONCEPTS.map(({ letter, name, desc, Comp, busy }) => (
         <section className="section concept" id={`concept-${letter.toLowerCase()}`} key={letter}>
           <div className="concept-head">
             <span className="concept-letter">{letter}</span>
@@ -79,7 +93,7 @@ export default function Concepts() {
             </span>
           </div>
           <div className="concept-frame">
-            <Comp />
+            <Comp busy={busy} />
           </div>
         </section>
       ))}
