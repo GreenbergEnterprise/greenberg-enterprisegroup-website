@@ -1154,3 +1154,105 @@ footer {
     transition: none !important;
   }
 }
+
+/* ============================================================= concepts page */
+.concepts-intro {
+  padding-top: 190px;
+  padding-bottom: 30px;
+}
+.concepts-intro h2 {
+  font-size: clamp(40px, 4.6vw, 66px);
+}
+.concepts-note {
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.75;
+  max-width: 720px;
+}
+.concept {
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+.concept-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 28px;
+  align-items: start;
+  max-width: 1000px;
+  margin-bottom: 30px;
+}
+.concept-letter {
+  font: 400 64px/1 var(--serif);
+  background: linear-gradient(120deg, var(--orange), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.concept-head h3 {
+  font-size: clamp(28px, 2.6vw, 40px);
+  margin-bottom: 10px;
+}
+.concept-head p {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 720px;
+}
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--orange-deep);
+  border: 1.5px solid rgba(241, 90, 36, 0.4);
+  border-radius: 999px;
+  padding: 9px 16px;
+  background: rgba(241, 90, 36, 0.06);
+  white-space: nowrap;
+}
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: livePulse 1.6s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(241, 90, 36, 0.45);
+  }
+  55% {
+    box-shadow: 0 0 0 8px rgba(241, 90, 36, 0);
+  }
+}
+.concept-frame {
+  position: relative;
+  aspect-ratio: 16 / 9.2;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-lift);
+  background: var(--tint-blue);
+}
+@media (width <= 640px) {
+  .concept-head {
+    grid-template-columns: auto 1fr;
+  }
+  .live-badge {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .concept-frame {
+    aspect-ratio: 4 / 4;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
+}
