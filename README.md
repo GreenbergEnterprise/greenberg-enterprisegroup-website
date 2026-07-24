@@ -109,6 +109,59 @@ the Vercel dashboard instead:
 6. Visit `https://<your-domain>/api/health/db` on the deployed site to
    confirm — same `{"ok":true,...}` response as local.
 
+## Contact form setup
+
+The homepage contact form (`components/v2fx/ContactForm.tsx`) saves every
+submission to MongoDB (`contact_submissions` collection — uses the same
+connection as above) and, if configured, sends a confirmation email to the
+visitor and a notification email to your team via
+[Resend](https://resend.com). Spam is filtered by a self-hosted CAPTCHA (no
+third-party account or API key needed) plus a honeypot field.
+
+### CAPTCHA (`CAPTCHA_SECRET`)
+
+The CAPTCHA (`lib/captcha.ts`, served from `/api/captcha`) is generated and
+verified entirely in this codebase — a noisy-text image challenge, with an
+accessible arithmetic-question alternative. Its answer is encrypted
+(AES-256-GCM) into a short-lived token the browser holds and the server
+decrypts back on submit — nothing is stored server-side between issuing a
+challenge and verifying it.
+
+All this needs is a secret key for the encryption, in `CAPTCHA_SECRET`. It
+isn't tied to any account — generate one yourself:
+
+```bash
+openssl rand -hex 32
+```
+
+Add the result to `.env.local` for local development, and to Vercel's
+**Settings → Environment Variables** (all three environments) for the
+deployed site — same as `MONGODB_URI` above. Without it, the contact form's
+API routes return a clear "CAPTCHA_SECRET is not set" error instead of
+crashing (there is a fallback for `npm run dev`, but not for a production
+build).
+
+### Email (`RESEND_API_KEY`)
+
+1. Create a free account at [resend.com](https://resend.com) and copy an API
+   key from **Settings → API Keys**.
+2. Add `RESEND_API_KEY` to `.env.local` / Vercel's environment variables.
+3. For testing, emails can send from Resend's shared sandbox address
+   (`onboarding@resend.dev` — this is the default if `CONTACT_FROM_EMAIL`
+   isn't set), but it **only delivers to the email address on your own
+   Resend account** — visitors won't actually receive anything from it.
+4. To email real visitors, verify a sending domain in Resend (**Domains →
+   Add Domain**, then add the DNS records it gives you), then set
+   `CONTACT_FROM_EMAIL` to an address on that domain, e.g.
+   `"Greenberg Enterprise Group <hello@greenbergenterprisegroup.com>"`.
+5. Optional: set `CONTACT_TO_EMAIL` if the "new submission" notification
+   should go somewhere other than the contact email in `lib/content.ts`.
+
+If `RESEND_API_KEY` isn't set, the form still works end-to-end (submissions
+still save to MongoDB) — it just skips sending emails and logs a warning
+server-side, the same graceful-degradation pattern as the MongoDB connection
+above.
+
 ## Adding MongoDB later
 
 Once the connection above is verified, the content itself can move from the
