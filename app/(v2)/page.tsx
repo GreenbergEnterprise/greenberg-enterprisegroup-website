@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { content } from "@/lib/content";
 import MotionFX from "@/components/MotionFX";
 import GlobeLive from "@/components/v2fx/GlobeLive";
+import ContactForm from "@/components/v2fx/ContactForm";
 
 /** Render lines separated by <br/>. */
 function multiline(lines: string[]) {
@@ -74,7 +75,7 @@ export default function Home() {
           ))}
         </nav>
 
-        <a className="btn btn-primary header-contact" href={`mailto:${brand.email}`}>
+        <a className="btn btn-primary header-contact" href="#contact">
           Contact <span aria-hidden="true">↗</span>
         </a>
       </header>
@@ -100,7 +101,7 @@ export default function Home() {
               <a className="btn btn-primary btn-lg" href={hero.ctaHref}>
                 {hero.ctaLabel} <span aria-hidden="true">→</span>
               </a>
-              <a className="btn btn-ghost btn-lg" href={`mailto:${brand.email}`}>
+              <a className="btn btn-ghost btn-lg" href="#contact">
                 Contact <span aria-hidden="true">↗</span>
               </a>
             </div>
@@ -305,12 +306,13 @@ export default function Home() {
           {contact.headingLines[1]}
         </h2>
         <div className="contact-actions" data-reveal style={{ "--d": ".16s" } as React.CSSProperties}>
-          <a className="btn btn-primary btn-lg" href={`mailto:${contact.email}`}>
-            {contact.ctaLabel} <span aria-hidden="true">→</span>
-          </a>
-          <a className="contact-email" href={`mailto:${contact.email}`}>
-            {contact.email}
-          </a>
+          <ContactForm />
+          <p className="contact-alt">
+            Prefer email? Reach us directly at{" "}
+            <a className="contact-email" href={`mailto:${contact.email}`}>
+              {contact.email}
+            </a>
+          </p>
         </div>
       </section>
 

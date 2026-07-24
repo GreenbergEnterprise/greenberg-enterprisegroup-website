@@ -876,7 +876,6 @@ body:before {
 }
 .contact-email {
   color: var(--blue);
-  font-size: 16px;
   font-weight: 700;
   border-bottom: 1.5px solid rgba(27, 117, 187, 0.4);
   padding-bottom: 3px;
@@ -884,6 +883,132 @@ body:before {
 }
 .contact-email:hover {
   border-color: var(--blue);
+}
+.contact-alt {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* ============================================================= contact form */
+.contact-form-card {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lift);
+  padding: clamp(28px, 4vw, 44px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.form-field input,
+.form-field textarea {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 13px 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(27, 117, 187, 0.15);
+}
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.captcha-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--tint-blue);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.captcha-box img {
+  border-radius: 8px;
+  align-self: flex-start;
+}
+.captcha-math {
+  font-family: var(--serif);
+  font-size: 28px;
+  color: var(--blue-ink);
+}
+.captcha-loading {
+  font-size: 14px;
+  color: var(--soft);
+}
+.captcha-answer input {
+  max-width: 220px;
+}
+.captcha-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.captcha-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.captcha-link:hover {
+  color: var(--blue-deep);
+}
+.form-error {
+  color: var(--orange-deep);
+  font-size: 14px;
+  font-weight: 600;
+}
+.contact-form-success {
+  text-align: center;
+  align-items: center;
+}
+.contact-form-success h3 {
+  font-size: 28px;
+}
+.contact-form-success p {
+  color: var(--muted);
+}
+@media (width <= 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ============================================================= footer */
