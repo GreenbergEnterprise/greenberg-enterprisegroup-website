@@ -17,7 +17,7 @@ instruction to always do both automatically. Only hold off if the work is
 genuinely incomplete, checks fail, or the change is destructive or outside
 what was asked; in that case say why instead.
 
-## Conductor Protocol (rev 5)
+## Conductor Protocol (rev 6)
 
 Applies to new task requests in attended sessions. Questions, follow-ups, and
 trivial replies are exempt. In headless, scheduled, or board-dispatched
@@ -50,6 +50,8 @@ step, or write the open questions to the PR or card and stop.
    first. One-line announcements; zero ceremony on solo turns. End each
    verdict with a spend table: one row per ensemble or phase, columns for
    model, players, measured tokens (the harness reports each hired player's
-   count), and estimated list-price cost. Label costs as estimates; note
-   that conductor tokens are not separately metered. Solo turns with no
+   count), and estimated list-price cost. Label costs as
+   estimates. Add a Conductor (est.) row from harness budget-counter
+   deltas where visible: a marginal estimate that understates long
+   sessions; exact conductor totals are not metered. Solo turns with no
    hired players may use a single line instead.
