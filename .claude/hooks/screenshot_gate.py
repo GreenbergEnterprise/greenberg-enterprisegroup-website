@@ -73,6 +73,15 @@ def main():
             continue
         if ts < cutoff:
             continue
+        try:
+            reachable = subprocess.run(
+                ["git", "merge-base", "--is-ancestor", parts[1], "HEAD"],
+                capture_output=True, timeout=20,
+            ).returncode == 0
+        except Exception:
+            reachable = False
+        if not reachable:
+            continue  # reverted or reset-away commits owe no evidence
         files = sh(
             "git", "diff-tree", "--no-commit-id", "--name-only", "-r",
             parts[1]
