@@ -80,3 +80,10 @@ work (API route internals, docs, config, pure logic) is exempt from both.
   Keep that graceful-degradation pattern when adding integrations.
 - **Hosting is Vercel**, with environment variables set in the dashboard.
   A new env var needs a redeploy before it takes effect.
+
+# Screenshot evidence location
+
+Save screenshot evidence as PNGs under `.screenshots/` in the repo root
+(gitignored). The completion gate (`.claude/hooks/screenshot_gate.py`,
+a Stop hook) checks that directory: a session that changed UI files
+cannot finish until evidence newer than the change exists there.
