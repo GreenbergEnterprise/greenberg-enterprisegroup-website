@@ -87,3 +87,20 @@ Save screenshot evidence as PNGs under `.screenshots/` in the repo root
 (gitignored). The completion gate (`.claude/hooks/screenshot_gate.py`,
 a Stop hook) checks that directory: a session that changed UI files
 cannot finish until evidence newer than the change exists there.
+
+# Show the requester the screenshots
+
+House rule, for anybody working on this site: any change a person can see
+gets screenshots they can see, in two places, neither optional:
+
+1. In the chat, the moment you have reviewed them: send the image files into
+   the conversation (the SendUserFile tool in cloud sessions, or whatever
+   file-send mechanism the session has). Do not wait to be asked, and do
+   not only describe them - the requester gets to look at the same pixels
+   you did, in the conversation where the work happened.
+2. Attached to the PR that announces the ship - not just taken
+   and described. When no image host is at hand, the proven pattern is an
+   evidence commit on the PR branch: commit the images, embed them in the
+   PR body via `raw.githubusercontent.com` URLs pinned to that commit's
+   SHA, then remove them in a follow-up commit so nothing lands in the
+   default branch - the pinned URLs keep rendering.
