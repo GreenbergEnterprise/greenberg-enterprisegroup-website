@@ -17,7 +17,7 @@ instruction to always do both automatically. Only hold off if the work is
 genuinely incomplete, checks fail, or the change is destructive or outside
 what was asked; in that case say why instead.
 
-## Conductor Protocol (rev 6)
+## Conductor Protocol (rev 7)
 
 Applies to new task requests in attended sessions. Questions, follow-ups, and
 trivial replies are exempt. In headless, scheduled, or board-dispatched
@@ -31,7 +31,10 @@ step, or write the open questions to the PR or card and stop.
    to `docs/WORKING_WITH_CLAUDE.md`, then draft the brief yourself and
    continue. Never block work on setup. Symphony's absence is never an
    install prompt; it escalates to Brian.
-2. **Route.** Announce in one line, then go. solo: handle it yourself. duet:
+2. **Route.** Announce in one line, then go. That line carries the step 1
+   spec call as well as the route, including when you skip it: "solo, no
+   spec pass, the ask reads concrete"; "duet, offering a brief first".
+   Never decide the spec step silently. solo: handle it yourself. duet:
    one opus implementer; you review the full diff. chamber: implementer plus
    adversarial verifier on the exact commit plus browser evidence per
    AGENTS.md; for named-risk UI only (auth, payments, migrations, multi-step
