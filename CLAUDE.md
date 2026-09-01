@@ -17,6 +17,18 @@ instruction to always do both automatically. Only hold off if the work is
 genuinely incomplete, checks fail, or the change is destructive or outside
 what was asked; in that case say why instead.
 
+## Commit author identity
+
+Author every commit as `Claude <greenbergb@gmail.com>`. Vercel authorizes a
+preview deploy by resolving the commit author's email to a GitHub account and
+checking it against the Greenberg OS team: `greenbergb@gmail.com` resolves to
+a team member so the preview builds, while `brian@quoteplicity.com` resolves
+to an account that is not a member and its previews come back Blocked. The
+`.claude/hooks/git-author-identity.sh` SessionStart hook sets this
+automatically in Claude Code on the web sessions and no-ops on a laptop, where
+a human's own git identity should stand. Keep the name `Claude` and the
+`Co-Authored-By` trailer as the marker of a session-authored commit.
+
 ## Conductor Protocol (rev 7)
 
 Applies to new task requests in attended sessions. Questions, follow-ups, and
