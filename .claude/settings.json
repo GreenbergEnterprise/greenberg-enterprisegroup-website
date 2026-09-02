@@ -1,6 +1,17 @@
 {
   "permissions": {
     "allow": [
+      "Agent(architect)",
+      "Agent(judge)",
+      "Agent(judge-critical)",
+      "Agent(red-team)",
+      "Agent(visual-reviewer)",
+      "Agent(visual-reviewer-critical)",
+      "Agent(fable-implementer)",
+      "Agent(implementer)",
+      "Agent(verifier)",
+      "Agent(browser-tester)",
+      "Agent(functional-validator)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
@@ -84,9 +95,16 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/git-author-identity.sh\""
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/conductor-seats-check.py\""
           }
         ]
       }
     ]
+  },
+  "env": {
+    "CLAUDE_CODE_THISTLE_GREBE": "no_nudges"
   }
 }
