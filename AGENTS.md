@@ -1,3 +1,64 @@
+# Rules for any AI agent (read first)
+
+These apply to every AI assistant working in this repo, Claude Code,
+Codex/ChatGPT, or any other, and are not optional. "The user" is whoever is
+directing the agent: the repo owner or an authorized team member.
+Any tool-specific workflow (shipping/merge flow, hooks, orchestration) lives in
+CLAUDE.md and binds Claude Code; the rules here bind every tool. These rules
+are a floor, not a ceiling: where CLAUDE.md or another repo-specific rule is
+stricter, the stricter one wins.
+
+1. Autonomy above a hard floor. Routine, reversible, in-scope changes that pass
+   their gates (required checks green, any required review or Judge PASS, and
+   the change staying inside a scope the user already approved) may deploy,
+   merge, migrate, and self-run without asking. For anything on the floor the
+   agent stops for the user's explicit, per-action word; it also stops for
+   anything CLAUDE.md or another repo rule adds to the floor, and it never
+   lowers the floor on its own. The floor, never crossed autonomously:
+   - Any switch that changes what production does: a feature flag, a
+     settings-row toggle, a per-company enablement, or an env var that gates
+     behavior, in any form, not only the literal act of "enabling" one.
+   - Landing or triggering a send to an external or customer-facing service:
+     email, SMS, third-party posts, an outbound webhook. This covers the deploy
+     or merge that starts the send, not only the agent calling the service by
+     hand. It does not cover this repo's own git host, CI, or deploy pipeline,
+     which the agent uses to do its work.
+   - Secret or credential changes.
+   - Destructive or bulk data mutations, and anything that moves money or
+     crosses a tenant boundary.
+   - A schema change that is irreversible or wide in blast radius: a drop, a
+     rename, a backfill, or a migration whose mis-ordering could take
+     production down. A forward-only additive migration is not on the floor and
+     ships on its own.
+   A standing authorization the user has written down is their word given in
+   advance: it grants autonomy for exactly the action and scope it names, no
+   wider, and does not loosen the floor for anything else.
+2. Schema before code, in the safe order for the change. For an additive
+   migration, apply and confirm it first, then land the code that reads it. For
+   a removal (a drop or rename), deploy the code that stops using the column or
+   table first, then run the migration that removes it. Never sequence a schema
+   change and its code so that production reads a shape that is not there yet.
+3. Verify, don't guess. Check primary sources; never fabricate data, prices,
+   IDs, results, or file contents. If unsure or blocked, say so plainly.
+4. Prove it. Anything user-visible gets screenshots you actually looked at, at
+   both widths; anything executable gets run with its real output pasted. A
+   claim with no evidence behind it is not done.
+5. Keep secrets and data in. No credentials, tokens, or keys in commits, PR
+   text, code comments, or anything sent to an external service, and no
+   customer or personal data (names, contact details, policy or lead records)
+   in any of those either. Keep internal hostnames out of PR text and anything
+   sent outward; a placeholder host in a checked-in `.env.example` is not a
+   secret and is fine to keep.
+6. Commit as yourself, never as a person. Use your own assistant identity, with
+   no model names. Claude Code: `Claude <noreply@anthropic.com>`. Codex or
+   ChatGPT: `ChatGPT <noreply@openai.com>`.
+7. Smallest reversible change. Don't widen scope on your own; for anything hard
+   to reverse or outward-facing, confirm first.
+8. When no human is watching, don't improvise. In a headless, scheduled, or
+   board-dispatched run with no attended requester, do the smallest safe
+   reversible step that is clearly in scope, or write the open questions to the
+   PR or the card and stop. Never take a floor action (rule 1) in such a run.
+
 # Spec before build
 
 Before starting large or ambiguous work, produce a short brief covering the
