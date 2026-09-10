@@ -53,8 +53,11 @@ guess.
    the ask is big or fuzzy enough that batched questions will not cut it,
    offer a grill instead (the grill-me skill): one question at a time until
    the branches are resolved.
-3. **Show the finished brief and get a nod** before starting the work. The
-   brief becomes the spec; keep it honest. An unresolved item stays in Open
+3. **Show the finished brief.** If it only restates work already authorized
+   (an accepted card, a clear request), it is a progress update and the work
+   starts. If it carries open questions that materially change what gets
+   built, ask those and only those, then start. Either way the brief becomes
+   the spec; keep it honest, and an unresolved item stays parked in Open
    questions rather than becoming a silent assumption.
 
 ## Where the brief ends up
