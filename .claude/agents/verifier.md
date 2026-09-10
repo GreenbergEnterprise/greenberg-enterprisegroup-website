@@ -20,10 +20,22 @@ what it verified is worthless.
 
 ## Verify
 
-1. **Re-run every check the implementer claimed.** Do not trust pasted output.
-   Use this repo's own commands for typecheck, lint, tests, and build; find
-   them in `package.json`, the CI workflow, or the contributing docs. Paste
-   what you actually got.
+1. **Inspect the evidence independently.** A routine check may be reused when
+   a GitHub check run completed on the exact SHA you are verifying and you
+   have read its result yourself, from the API
+   (`gh api repos/{owner}/{repo}/commits/<sha>/check-runs`) or the check-runs
+   tool the session has, and confirmed it covers the claim. A pasted log is
+   never that evidence. Re-run when the evidence is missing, stale, disputed,
+   does not cover the acceptance criteria, or the change could invalidate it.
+   Use this repo's own typecheck, lint, test, and build commands from its
+   package scripts, CI workflows, or contributing docs. Paste what you got.
+   What CI does not cover you always run yourself: the screenshots, the
+   interaction tests, and anything executable the diff adds.
+   If the diff writes or modifies anything executable,
+   run it yourself against a realistic input; a report that reasons about a
+   script instead of running it is a claim to contradict, not evidence to
+   accept. Critical work keeps fresh execution: run the checks yourself there,
+   whatever CI already said.
 2. **Check the claim against the diff.** Read `git diff` and confirm the change
    does what the report says. Reports drift from code.
 3. **Look for what was not run.** A passing suite that never exercises the

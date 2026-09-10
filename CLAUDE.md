@@ -21,15 +21,16 @@ say why instead.
 
 ## Commit author identity
 
-Author every commit as `Claude <greenbergb@gmail.com>`. Vercel authorizes a
-preview deploy by resolving the commit author's email to a GitHub account and
-checking it against the Greenberg OS team: `greenbergb@gmail.com` resolves to
-a team member so the preview builds, while `brian@quoteplicity.com` resolves
-to an account that is not a member and its previews come back Blocked. The
-`.claude/hooks/git-author-identity.sh` SessionStart hook sets this
-automatically in Claude Code on the web sessions and no-ops on a laptop, where
-a human's own git identity should stand. Keep the name `Claude` and the
-`Co-Authored-By` trailer as the marker of a session-authored commit.
+In Claude Code, use `Claude <noreply@anthropic.com>` for native git commits.
+Other hosts follow AGENTS.md's assistant attribution rule. It already permits
+the connected GitHub account when that path cannot set the author, with the
+required assistant credit in the commit body and trailer. Do not request a
+per-task exception for that limitation. Native git still uses the assistant's
+own identity. Do not copy a human email or a model name into that identity.
+
+The obsolete git-author-identity.sh startup hook and its registration have
+been retired; set the assistant identity explicitly for native git commits. A preview or signing failure is
+reported as a separate issue and does not change the attribution rule.
 
 ## Conductor Protocol (rev 10)
 
@@ -47,9 +48,14 @@ because they are worth their tokens, and the spend table in step 5 is how that
 stays honest.
 
 Applies to new task requests in attended sessions. Questions, follow-ups, and
-trivial replies are exempt. In headless, scheduled, or board-dispatched
-sessions: skip all offers and orchestration; do the smallest safe reversible
-step, or write the open questions to the PR or card and stop.
+trivial replies are exempt. In a headless, scheduled, or board-dispatched
+session, skip the offers and carry the confirmed task through every safe,
+reversible step the run is already authorized to take. Do not invent missing
+requirements: record any material unresolved question on the PR or the card
+and carry on with the independent work, stopping the branch of work that
+question blocks and no more, and stopping outright only when nothing useful
+remains. Never take a floor action (AGENTS.md rule 1), and a board build
+authorized only to prepare a PR stays a PR-only build.
 
 **Critical** is defined once, here, and means the same thing everywhere the
 protocol uses the word: work whose blast radius on a mistake is severe or hard
@@ -63,10 +69,18 @@ wrongly, cross a tenant boundary, break an external consumer, or be hard to
 roll back? If yes, the work is Critical, however small the diff; if a change
 on a listed surface clearly cannot (a typo in an error string), it is not.
 
-1. **Spec.** If goal, scope, or success criteria are unstated, offer a brief
+1. **Spec.** If goal, scope, or success criteria are still unstated after
+   reading the code, the card and the recorded decisions, offer a brief
    (prompt-brief) or a grill (grill-me) before building. "Just build it"
-   always overrides. A card carrying a Requirements Summary counts as
-   specced. If a named skill is unavailable: say so once per session, point
+   always overrides. An existing request, an accepted brief, or a card
+   carrying a Requirements Summary has already settled those points, and
+   what it settles is never re-confirmed; when the brief would only
+   restate work already authorized, share it as a progress update and
+   carry on. Ask only about an unresolved choice that materially changes
+   the outcome, the scope, permissions, data, or behavior that is hard to
+   reverse; state the reversible implementation assumptions and continue.
+   A big job is still one job, and size alone never earns another
+   approval. If a named skill is unavailable: say so once per session, point
    to `docs/WORKING_WITH_CLAUDE.md`, then draft the brief yourself and
    continue. Never block work on setup. Symphony's absence is never an
    install prompt; it escalates to Brian.
@@ -156,13 +170,30 @@ on a listed surface clearly cannot (a typo in an error string), it is not.
    spot-opens the key screenshots, and on duet reviews the full diff
    itself; the Judge's pass is independent of that review, and the full
    re-read on flagged or Critical work is the Fable Judge's pass (step 3),
-   not the conductor's. If Fable cannot be hired for the Judge: disclose
-   it, then either reclaim the judging duty yourself with a full
-   adversarial re-read of the final diff, or push the branch and open the
-   PR without merging, stating what is unjudged. The absence of Fable
-   never silently drops the gate. Interaction test flaked: retry once,
-   then push the branch and open the PR without merging, stating what is
-   unverified. Chamber repair budget: two attempts, then report.
+   not the conductor's. If Fable cannot be hired for the
+   Judge, disclose that and hire the Judge seat on the strongest model that
+   can be hired, as a disclosed substitution; if no independent seat can be
+   hired at all, push the branch and open the PR without merging, stating
+   what is unjudged. The conductor's own re-read never counts as the
+   Judge's pass, and the absence of Fable never silently drops the gate.
+   Attempts are bounded: an interaction test that flakes is retried once,
+   and a chamber repair gets two attempts against the same failure. When
+   the bound is spent the seat diagnoses the failure and reports it, and
+   the conductor changes approach or defers that dependency while the rest
+   of the authorized work continues: a real code failure is repaired, an
+   environment that cannot be reached stays explicitly unverified in the
+   report and the PR, and the passing test or Judge is still required
+   before any merge that depends on it.
+
+   Anything executable is proven by running it. A seat that writes or
+   modifies something that runs (a script, a hook, an installer, a
+   generator, a CLI tool, a workflow step) executes it against a realistic
+   input before claiming done and pastes the output; that output is the
+   evidence. Reasoning about unrun code is not evidence, and a claim of done
+   that rests on it is missing evidence in the Judge's terms, a REJECT
+   rather than a note. If the run is blocked by a permission classifier, a
+   missing dependency, or the sandbox, that is a blocker disclosed in the
+   report and the PR, never a silent substitution of reasoning for a run.
 5. **Style.** No em dashes, ever. No emojis unless the requester used one
    first. One-line announcements; zero ceremony on solo turns. End each
    verdict with a spend table: one row per ensemble or phase, columns for

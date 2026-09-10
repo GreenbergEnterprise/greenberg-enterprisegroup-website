@@ -7,6 +7,8 @@ Any tool-specific workflow (shipping/merge flow, hooks, orchestration) lives in
 CLAUDE.md and binds Claude Code; the rules here bind every tool. These rules
 are a floor, not a ceiling: where CLAUDE.md or another repo-specific rule is
 stricter, the stricter one wins.
+The Conductor routes and independent review requirements apply on every host;
+model names, agent registration, and hook syntax remain host-specific.
 
 1. Autonomy above a hard floor. Routine, reversible, in-scope changes that pass
    their gates (required checks green, any required review or Judge PASS, and
@@ -49,23 +51,86 @@ stricter, the stricter one wins.
    in any of those either. Keep internal hostnames out of PR text and anything
    sent outward; a placeholder host in a checked-in `.env.example` is not a
    secret and is fine to keep.
-6. Commit as yourself, never as a person. Use your own assistant identity, with
-   no model names. Claude Code: `Claude <noreply@anthropic.com>`. Codex or
-   ChatGPT: `ChatGPT <noreply@openai.com>`.
+6. Commit with explicit assistant attribution. A commit is attributable to the
+   assistant that made it, never silently to a human. Where the commit path
+   lets you set the author, including native git and Codex CLI, use your own
+   assistant identity: Claude Code: `Claude <noreply@anthropic.com>`;
+   Codex or ChatGPT: `ChatGPT <noreply@openai.com>`.
+   Where the commit path cannot set the author (such as ChatGPT's connected
+   GitHub tool), the user gives standing authorization, across sessions and
+   tasks, to commit under the connector's default connected account, provided
+   every such commit credits the assistant explicitly in its message: the
+   trailer `Co-Authored-By: ChatGPT <noreply@openai.com>`, or the matching
+   identity for another assistant, and, wherever the commit path allows a body
+   at all, a first line or body sentence naming the assistant that authored the
+   change through the connector. Do not pause or ask for a per-task authorship
+   exception solely because the connector cannot set the author: this rule is
+   that permission in advance. A commit under a person's account with no
+   assistant credit is still a violation. The permission covers only that
+   commit path's author limitation: a path that can set the author must use the
+   assistant identity, and no model names belong in the identity, trailer, or
+   credit sentence. Host-specific examples and historical handoff summaries do
+   not override this rule for another host. This attribution permission does
+   not expand the task's authorized scope or waive rule 1, required checks,
+   independent review, or release and merge gates.
 7. Smallest reversible change. Don't widen scope on your own; for anything hard
    to reverse or outward-facing, confirm first.
-8. When no human is watching, don't improvise. In a headless, scheduled, or
-   board-dispatched run with no attended requester, do the smallest safe
-   reversible step that is clearly in scope, or write the open questions to the
-   PR or the card and stop. Never take a floor action (rule 1) in such a run.
+8. When no human is watching, carry the work through. In a headless,
+   scheduled, or board-dispatched run with no attended requester, take the
+   confirmed task through every safe, reversible step the run's existing
+   authorization already covers. Do not invent missing requirements: record a
+   material unresolved question on the PR or the card and keep going on the
+   work that does not depend on it, stopping only the branch of work that
+   question actually blocks, and stopping the task only when nothing useful
+   remains. Never take a floor action (rule 1) in such a run, and a board build
+   authorized only to prepare a pull request stays a PR-only build.
 
 # Spec before build
 
-Before starting large or ambiguous work, produce a short brief covering the
-goal, the scope, and the success criteria, and confirm it with the requester
-before building. A task card that already carries a Requirements Summary or a
-brief counts as confirmed. One-line fixes, questions, and clearly specified
-asks do not need this.
+Before large or materially ambiguous work, assemble a short brief covering the
+goal, the scope, and the success criteria, after reading the relevant code, the
+task's requirements, and the decisions already recorded. An existing request, an
+accepted brief, or a task card that resolves those points is sufficient on its
+own and is never re-confirmed; a brief that only restates already authorized
+work is a progress update, so share it and proceed. Ask only about unresolved
+choices that materially affect the outcome, the scope, permissions, data, or
+behavior that is hard to reverse; state the reasonable reversible implementation
+assumptions you are making and continue. Large work alone is not a reason to
+seek another approval. Grilling stays optional, used when the requester asks for
+it or accepts the offer. Routine fixes, questions, and clearly specified asks
+need no brief.
+
+# Continue past blockers
+
+**Work around a blocked dependency.** When something the task needs is
+unavailable, continue the authorized work: name exactly which steps depend on
+the blocked thing, and do the rest. Reuse an existing tool or environment that
+suits the job where you are already authorized to use it. Never weaken an
+access control, change the requested outcome, expand the scope, or treat
+missing evidence as a pass.
+
+**Do not let a temporary capability problem consume the task.** Diagnose the
+failure and try one reasonable supported recovery. When the same failure
+recurs with no new evidence, change approach or defer the step that depends on
+it; retry only when a changed condition or a concrete diagnosis makes another
+attempt worth something. If authenticated testing is unavailable, state exactly
+what stays unverified, continue the other authorized work, and keep any release
+gate that depends on that evidence closed.
+
+**Post progress updates.** In an attended session, report at meaningful
+milestones and whenever a blocker changes the plan: what is complete, what is
+blocked, what comes next. An update is not a request for permission. An
+unattended run uses the job progress mechanism it already has.
+
+**Never end a turn with only a promise to continue.** If authorized work
+remains and a next step is available, perform it. If nothing can proceed, say
+plainly that the work is paused, why, and the smallest action that resumes it.
+Never imply work is continuing when nothing is running.
+
+**Finish the authorized work that can be finished.** Pause the whole task only
+when every useful remaining step depends on missing access, a decision only the
+user can make, or authorization not yet given, and leave a precise record of
+the remaining step and what would unblock it.
 
 # Verify like a human before calling it done
 

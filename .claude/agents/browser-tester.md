@@ -50,4 +50,7 @@ interaction you did not perform.
 - No em dashes.
 - Never commit a temporary fixture or debug splice, and commit real edits
   before splicing anything temporary.
-- A flake is not a pass. Retry once, then report it as unverified.
+- A flake is not a pass. Retry once, then report it as unverified. The report
+  does not end the task: say which step stayed unverified and why, so the
+  conductor can change approach or defer that dependency while the rest of the
+  work continues. A release gate depending on that evidence stays closed.
