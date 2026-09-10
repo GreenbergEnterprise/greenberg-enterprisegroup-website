@@ -1,5 +1,19 @@
 # Working with Claude here
 
+## Direct work and explicit Orchestra activation
+
+Routine work uses the current session agent and the proportionate checks in
+AGENTS.md. The Conductor Protocol is dormant until the requester says "use
+orchestra" or invokes `/orchestra`. On hosts without slash commands, the plain
+language request is sufficient. A bounded request for one reviewer does not
+activate the whole protocol. "Orchestra off" returns to direct work.
+
+The role/model/fallback guidance below describes an activated Orchestra only.
+It does not require hiring agents, confirming a model, or installing Symphony
+for ordinary work. Existing CI and explicitly configured board/bench workflows
+keep their own requirements. The requester and all authorized team members use
+the same default; there is no per-person setup or extra confirmation.
+
 How Claude Code is set up in this repo and what to do when a session says
 something is missing.
 

@@ -5,6 +5,9 @@ description: Turn a rough or vague request into a structured task brief before s
 
 # Prompt Brief
 
+Use the current session agent. A brief request does not activate Orchestra.
+Do not require a brief for an already clear task or reconfirm accepted scope.
+
 Rough one-or-two-sentence asks are fine for small work, but for bigger asks
 the expensive failures are always the same: the goal was assumed, the
 success criteria were never stated, or something obvious was out of scope
