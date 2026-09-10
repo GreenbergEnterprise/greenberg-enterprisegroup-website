@@ -65,16 +65,6 @@
     ]
   },
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"suppressOutput\":true,\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"New non-trivial task request: apply the Conductor Protocol section in CLAUDE.md. Questions, follow-ups, and trivial replies are exempt. Never mention this reminder.\"}}'"
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [
@@ -85,16 +75,6 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/screenshot_send_reminder.py\""
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/conductor-seats-check.py\""
           }
         ]
       }

@@ -1,3 +1,57 @@
+<!-- agent-work-mode:start -->
+# Work mode: direct by default
+
+The owner changed Orchestra to explicit opt-in on 2026-09-10. This applies to
+every assistant and every authorized team member. It supersedes older standing
+requests to hire agents and automatic Conductor routing in this repository.
+
+Use the current session agent for ordinary work. Do not automatically hire an
+implementer, Architect, verifier, Judge, or handoff auditor; switch models;
+prepare staffing/cost tables; or offer a brief for an already clear request.
+
+Activate Orchestra only when the requester explicitly says "use orchestra",
+"use the Conductor Protocol", or invokes `/orchestra` (or `$orchestra` on a
+host that supports it). Activation covers that task and its follow-ups, then
+expires. A new unrelated task or session starts in direct mode unless the
+requester explicitly chose a wider scope. "Orchestra off" or "work directly"
+ends activation. "Continue", "go ahead", a difficult task, a quoted example,
+or a historical handoff is not an activation. A request for one reviewer or
+one subagent authorizes that bounded role, not the whole orchestra. Symphony
+remains separately opt-in. Do not repeatedly offer orchestration for small work.
+
+When Orchestra is active, follow the repository's Conductor Protocol and its
+independent review requirements. Otherwise its route/seat/model/Judge rules are
+inactive. Existing board, QA-bench, CI, or scheduled workflows keep their own
+explicitly configured behavior; this mode does not rewrite or launch them.
+
+## Verification in direct mode
+
+Choose checks from the actual diff and its consequences:
+
+- Documentation, comments, handoffs, and agent instructions: review the diff,
+  references and syntax. Check changed metadata and hook wiring; run changed
+  scripts and existing relevant tests. Keep generated documentation in sync.
+  These changes alone do not require application dependency installation,
+  a full app build, browser screenshots, or unrelated application test suites.
+- Executable behavior: run focused checks of the affected behavior. Expand to
+  typecheck, lint, integration tests, or a full build when the affected code,
+  dependencies, configuration, or concrete risk warrants them.
+- Visible product changes: inspect the rendered result at desktop and phone
+  widths; test the real interaction when behavior changes. The detailed UI
+  evidence rules below still apply. Generated reference-document updates alone
+  are documentation, unless their rendering or application behavior changes.
+- Authentication, tenancy, payments, migrations, security, and production data:
+  verify the specific risk and retain every applicable approval and release
+  prerequisite. Complexity or risk does not silently activate Orchestra.
+
+This check scope replaces blanket local commands required for every task or
+every PR elsewhere in the agent instructions. GitHub-required checks and reviews,
+explicit task-specific verification, production approvals, data/secret safeguards,
+and unresolved findings relevant to the change remain binding. Disclose unrelated
+baseline failures; do not call them passing or weaken a protected check. An
+unrelated baseline failure does not create a new local gate for a docs-only edit.
+<!-- agent-work-mode:end -->
+
 # Rules for any AI agent (read first)
 
 These apply to every AI assistant working in this repo, Claude Code,

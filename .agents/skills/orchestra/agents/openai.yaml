@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestra"
+  short_description: "Run the Conductor Protocol on explicit request"
+  default_prompt: "Use $orchestra for this task."
+policy:
+  allow_implicit_invocation: false
