@@ -1,86 +1,22 @@
 {
-  "permissions": {
-    "allow": [
-      "Agent(architect)",
-      "Agent(judge)",
-      "Agent(judge-critical)",
-      "Agent(red-team)",
-      "Agent(visual-reviewer)",
-      "Agent(visual-reviewer-critical)",
-      "Agent(fable-implementer)",
-      "Agent(implementer)",
-      "Agent(verifier)",
-      "Agent(browser-tester)",
-      "Agent(functional-validator)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(git show:*)",
-      "Bash(git branch:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(git fetch:*)",
-      "Bash(git pull:*)",
-      "Bash(git checkout:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)",
-      "Bash(rg:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(find:*)",
-      "Bash(npm install:*)",
-      "Bash(npm ci:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run dev:*)",
-      "Bash(npm start:*)",
-      "Bash(npx tsc:*)",
-      "Bash(npx next:*)",
-      "Bash(npx playwright:*)",
-      "Bash(openssl rand:*)",
-      "Bash(curl http://localhost:*)",
-      "mcp__Claude_Code_Remote",
-      "mcp__claude-code-remote",
-      "mcp__Claude_Code_Remote__send_later",
-      "mcp__Claude_Code_Remote__create_trigger",
-      "mcp__Claude_Code_Remote__delete_trigger",
-      "mcp__Claude_Code_Remote__update_trigger",
-      "mcp__Claude_Code_Remote__fire_trigger",
-      "mcp__Claude_Code_Remote__list_triggers",
-      "mcp__github",
-      "mcp__GitHub",
-      "Bash(git rev-parse:*)",
-      "Bash(git ls-files:*)",
-      "Bash(git remote:*)",
-      "Bash(git stash:*)",
-      "Bash(git merge:*)",
-      "Bash(git rebase:*)",
-      "Bash(grep:*)",
-      "Bash(npm run lint)",
-      "Bash(npm run lint:*)",
-      "Bash(npm run check:*)",
-      "Bash(npm run start:*)",
-      "Bash(npx eslint:*)",
-      "Bash(node:*)"
-    ]
-  },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/screenshot_gate.py\""
-          },
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/screenshot_send_reminder.py\""
-          }
-        ]
-      }
-    ]
-  },
   "env": {
     "CLAUDE_CODE_THISTLE_GREBE": "no_nudges"
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Agent",
+      "Bash",
+      "WebFetch",
+      "WebSearch",
+      "mcp__Claude_Code_Remote",
+      "mcp__claude-code-remote",
+      "mcp__github",
+      "mcp__GitHub",
+      "mcp__Vercel",
+      "mcp__vercel",
+      "mcp__MongoDB_Atlas",
+      "mcp__mongodb-atlas"
+    ]
   }
 }

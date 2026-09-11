@@ -1,11 +1,10 @@
 ---
 name: prompt-brief
-description: Turn a rough or vague request into a structured task brief before starting work. Use when someone invokes /prompt-brief, asks to "spec this out", "brief this", or wants a prompt refined, or when the Conductor Protocol's spec step picks the lighter option; a request large or ambiguous enough that a wrong guess about goal, scope, or success criteria would waste a session, but not so open-ended that it needs a full grill. One-line fixes, questions, and clearly specified asks do not need it.
+description: Turn a rough or vague request into a structured task brief before starting work. Use when someone invokes /prompt-brief, asks to "spec this out", "brief this", or wants a prompt refined; a request large or ambiguous enough that a wrong guess about goal, scope, or success criteria would waste a session, but not so open-ended that it needs a full grill. One-line fixes, questions, and clearly specified asks do not need it.
 ---
 
 # Prompt Brief
 
-Use the current session agent. A brief request does not activate Orchestra.
 Do not require a brief for an already clear task or reconfirm accepted scope.
 
 Rough one-or-two-sentence asks are fine for small work, but for bigger asks
@@ -35,9 +34,9 @@ what we are explicitly NOT doing, so nobody builds the wrong thing.
 
 ## Verification
 How the result gets proven: which tests run or get written, what
-screenshots get taken, what the requester will click. For anything visual
-in this repo, that means the screenshot script and an interaction test per
-AGENTS.md.
+screenshots get taken, what the requester will click. For anything visual,
+that means the screenshot recipe and the interaction test that AGENTS.md
+defines for this repo.
 
 ## Open questions
 Anything genuinely unresolved. Parked honestly, never papered over with a
