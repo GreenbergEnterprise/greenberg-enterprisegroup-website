@@ -1,6 +1,6 @@
 ---
 name: grill-me
-description: Interrogate the requester one question at a time until a vague idea becomes a fully specced Requirements Summary. Use when someone invokes /grill-me, says "grill me", "interrogate me", or "ask me questions first", or accepts a grill offered by the prompt-brief skill or the Conductor Protocol in CLAUDE.md. Also offer it before any large piece of work whose goal, scope, or success criteria exist only in the requester's head; a wrong guess there costs a whole session.
+description: Interrogate the requester one question at a time until a vague idea becomes a fully specced Requirements Summary. Use when someone invokes /grill-me, says "grill me", "interrogate me", or "ask me questions first", or accepts a grill offered by the prompt-brief skill. Also offer it before any large piece of work whose goal, scope, or success criteria exist only in the requester's head; a wrong guess there costs a whole session.
 ---
 
 # Grill Me

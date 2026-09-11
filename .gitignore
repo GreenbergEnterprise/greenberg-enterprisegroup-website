@@ -34,5 +34,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Screenshot evidence for the completion gate
+# Screenshot evidence (save capture PNGs here)
 .screenshots/
