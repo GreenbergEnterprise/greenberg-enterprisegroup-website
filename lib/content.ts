@@ -2,8 +2,8 @@
  * Central site content.
  *
  * Every piece of copy on the page lives here so it is easy to edit in one
- * place. When a database is added later, this module can be replaced by (or
- * backed by) a MongoDB fetch that returns the same `SiteContent` shape — the
+ * place. This module can be replaced by (or backed by) a database fetch that
+ * returns the same `SiteContent` shape — the
  * page components consume the typed object and do not care where it comes from.
  *
  * Content mirrors the live site at
