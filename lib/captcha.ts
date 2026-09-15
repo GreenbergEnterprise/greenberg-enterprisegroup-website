@@ -1,5 +1,4 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
-import sharp from "sharp";
 
 /**
  * Self-hosted CAPTCHA — no third-party service or API key required.
@@ -126,7 +125,32 @@ function renderNoisyTextSvg(code: string): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#fbfaf8"/>${noise}${glyphs}</svg>`;
 }
 
+// `sharp` is a native module. Load it lazily — never at module load, so a load
+// failure can't take down the math path or the contact route that imports
+// verifyCaptcha from here — and memoize the outcome so a runtime where sharp is
+// unavailable falls back to math challenges once, instead of re-attempting the
+// failing import on every request.
+let sharpLoad: Promise<typeof import("sharp") | null> | undefined;
+
+function loadSharp(): Promise<typeof import("sharp") | null> {
+  if (!sharpLoad) {
+    sharpLoad = import("sharp").catch((error) => {
+      console.error(
+        "Native `sharp` module unavailable; contact-form CAPTCHA will serve math challenges:",
+        error
+      );
+      return null;
+    });
+  }
+  return sharpLoad;
+}
+
 async function imageChallenge(): Promise<CaptchaChallenge> {
+  const mod = await loadSharp();
+  // No image renderer on this runtime — degrade to a math challenge so the
+  // contact form stays usable (integrations degrade, they don't crash).
+  if (!mod) return mathChallenge();
+  const sharp = mod.default;
   const code = randomCode();
   const png = await sharp(Buffer.from(renderNoisyTextSvg(code))).png().toBuffer();
   return {
