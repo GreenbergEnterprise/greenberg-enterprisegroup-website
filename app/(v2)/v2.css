@@ -906,7 +906,11 @@ body:before {
 }
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, 1fr) rather than 1fr: a bare 1fr resolves to minmax(auto, 1fr),
+     and Firefox honors the input's intrinsic min-width (~20ch) as that auto
+     minimum, so the two columns refuse to shrink and the email field overflows
+     the card. minmax(0, …) lets them shrink to fit. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px;
 }
 .form-field {
