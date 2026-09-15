@@ -57,7 +57,7 @@ Nothing here routes work to agents any more. What replaced it:
   beyond a search or a scout.
 - Review is asked for, not routed. When Brian asks for a review, or when a
   mistake in the change would be hard to reverse (the contact form and its
-  CAPTCHA routes, the Resend email path, MongoDB writes, the redirects in
+  CAPTCHA routes, the Resend email path, Postgres writes, the redirects in
   `next.config.mjs`, production data), run `/code-review` on the final diff,
   `/security-review` when the change touches a security surface, and for a
   second opinion hire one general-purpose subagent on the strongest model

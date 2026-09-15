@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDb } from "@/lib/mongodb";
+import { getSql } from "@/lib/db";
 import { verifyCaptcha } from "@/lib/captcha";
 import { getResend, getFromAddress } from "@/lib/resend";
 import { content } from "@/lib/content";
@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
-  let db;
+  let sql: ReturnType<typeof getSql>;
   try {
-    db = await getDb();
+    sql = getSql();
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "The database is not configured yet." },
@@ -72,28 +72,36 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const submissions = db.collection("contact_submissions");
-
+  const emailLower = email.toLowerCase();
+  const userAgent = request.headers.get("user-agent") || "unknown";
   const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS);
-  const recentCount = await submissions.countDocuments({
-    $or: [{ email: email.toLowerCase() }, { ip }],
-    createdAt: { $gte: since },
-  });
-  if (recentCount >= RATE_LIMIT_MAX) {
+
+  try {
+    const recent = await sql<{ count: number }[]>`
+      select count(*)::int as count
+      from contact_submissions
+      where created_at >= ${since}
+        and (email = ${emailLower} or ip = ${ip})
+    `;
+    if (recent[0].count >= RATE_LIMIT_MAX) {
+      return NextResponse.json(
+        { error: "Too many submissions — please try again in a few minutes." },
+        { status: 429 }
+      );
+    }
+
+    await sql`
+      insert into contact_submissions (name, email, message, ip, user_agent)
+      values (${name}, ${emailLower}, ${message}, ${ip}, ${userAgent})
+    `;
+  } catch (error) {
+    // Don't leak DB internals to the visitor; log the real cause server-side.
+    console.error("Contact form DB write failed:", error);
     return NextResponse.json(
-      { error: "Too many submissions — please try again in a few minutes." },
-      { status: 429 }
+      { error: "Couldn't save your message right now. Please try again in a moment." },
+      { status: 500 }
     );
   }
-
-  await submissions.insertOne({
-    name,
-    email: email.toLowerCase(),
-    message,
-    ip,
-    userAgent: request.headers.get("user-agent") || "unknown",
-    createdAt: new Date(),
-  });
 
   // Email is best-effort: a delivery failure here should never make the visitor
   // think their message wasn't received, since it's already safely in the database.

@@ -29,7 +29,7 @@ Choose checks from the actual diff and its consequences:
 - Visible product changes: inspect the rendered result at desktop and phone
   widths; test the real interaction when behavior changes. The UI evidence
   rules below still apply.
-- The contact form and its CAPTCHA routes, the Resend email path, MongoDB
+- The contact form and its CAPTCHA routes, the Resend email path, Postgres
   writes, redirects, and production data: verify the specific risk and
   retain every applicable approval. Complexity or risk is the cue to ask for
   an independent review (CLAUDE.md, "Independent review, on request"), never
@@ -257,14 +257,14 @@ pure logic) is exempt from both.
   variable names.
 - **All copy and data live in `lib/content.ts`**, a typed `SiteContent`
   object. Edit copy there, not in `page.tsx`. Components depend on the type,
-  not on where the data comes from, so a later move to MongoDB needs no UI
+  not on where the data comes from, so a later move to a database needs no UI
   change.
 - **Route groups map to URLs like this:** `app/(v2)` serves `/` and
   `/concepts`, `app/(v1)` serves `/v1`, `app/(v3)` serves `/v3`. Each group
   has its own layout and its own CSS file, so a style change in one group
   does not reach the others. `/v2` redirects to `/` via `next.config.mjs`;
   keep that redirect working.
-- **Integrations degrade, they do not crash.** Without `MONGODB_URI` the
+- **Integrations degrade, they do not crash.** Without `DATABASE_URL` the
   pages still render; without `RESEND_API_KEY` the contact form still saves
   and just skips email. `CAPTCHA_SECRET` has a dev-only fallback, so a
   production build without it returns a clear error from the contact routes.
